@@ -141,7 +141,7 @@ func GenerateKeypair(curve types.CurveType) (*KeyPair, error) {
 			return nil, fmt.Errorf("%w: %s", ErrPrivKeyUndecodable, privKeyHex)
 		}
 
-		pubKeyHex := OcamlDerivePublicKey(privKeyBytes)
+		pubKeyHex := OcamlDerivePublicKey(privKeyHex)
 
 		pubKeyBytes, err := hex.DecodeString(pubKeyHex)
 		if err != nil {
