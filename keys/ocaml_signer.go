@@ -148,11 +148,11 @@ func (s *SignerTweedle) Sign(
 // Verify verifies a Signature, by checking the validity of a Signature,
 // the SigningPayload, and the PublicKey of the Signature.
 func (s *SignerTweedle) Verify(signature *types.Signature) error {
-	if signature.SignatureType != types.SchnorrPosiedon {
+	if signature.SignatureType != types.SchnorrPoseidon {
 		return fmt.Errorf(
 			"%w: expected %v but got %v",
 			ErrVerifyUnsupportedPayloadSignatureType,
-			types.SchnorrPosiedon,
+			types.SchnorrPoseidon,
 			signature.SignatureType,
 		)
 	}
