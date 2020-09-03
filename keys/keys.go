@@ -79,6 +79,11 @@ func ImportPrivKey(privKeyHex string, curve types.CurveType) (*KeyPair, error) {
 			CurveType: curve,
 		}
 
+		privKeyBytes, err := hex.DecodeString(privKeyHex)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %s", ErrPrivKeyUndecodable, privKeyHex)
+		}
+
 		keyPair := &KeyPair{
 			PublicKey:  pubKey,
 			PrivateKey: privKeyBytes,
@@ -131,7 +136,7 @@ func GenerateKeypair(curve types.CurveType) (*KeyPair, error) {
 	case types.Tweedle:
 		privKeyHex := OcamlGeneratePrivKey()
 
-		privKey, err := hex.DecodeString(privKeyHex)
+		privKeyBytes, err := hex.DecodeString(privKeyHex)
 		if err != nil {
 			return nil, fmt.Errorf("%w: %s", ErrPrivKeyUndecodable, privKeyHex)
 		}

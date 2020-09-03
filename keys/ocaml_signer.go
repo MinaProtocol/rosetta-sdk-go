@@ -66,7 +66,7 @@ func OcamlSign(privKeyHex string, unsignedTransactionHex string) string {
 	return out.String()
 }
 
-func OcamlVerify(pubKeyHex string, signedTransactionHex string) string {
+func OcamlVerify(pubKeyHex string, signedTransactionHex string) bool {
 	cmd := exec.Command(
 		binary,
 		"verify",
@@ -79,7 +79,7 @@ func OcamlVerify(pubKeyHex string, signedTransactionHex string) string {
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
-		log.Error(err)
+		println(err)
 		return false
 	}
 	return true
@@ -148,11 +148,11 @@ func (s *SignerTweedle) Sign(
 // Verify verifies a Signature, by checking the validity of a Signature,
 // the SigningPayload, and the PublicKey of the Signature.
 func (s *SignerTweedle) Verify(signature *types.Signature) error {
-	if signature.SignatureType != types.Tweedle {
+	if signature.SignatureType != types.SchnorrPosiedon {
 		return fmt.Errorf(
 			"%w: expected %v but got %v",
 			ErrVerifyUnsupportedPayloadSignatureType,
-			types.Tweedle,
+			types.SchnorrPosiedon,
 			signature.SignatureType,
 		)
 	}
