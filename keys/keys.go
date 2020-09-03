@@ -66,6 +66,25 @@ func ImportPrivKey(privKeyHex string, curve types.CurveType) (*KeyPair, error) {
 		}
 
 		return keyPair, nil
+	case types.Tweedle:
+		pubKeyHex := OcamlDerivePublicKey(privKeyHex)
+
+		pubKeyBytes, err := hex.DecodeString(pubKeyHex)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %s", ErrPrivKeyUndecodable, pubKeyHex)
+		}
+
+		pubKey := &types.PublicKey{
+			Bytes:     pubKeyBytes,
+			CurveType: curve,
+		}
+
+		keyPair := &KeyPair{
+			PublicKey:  pubKey,
+			PrivateKey: privKeyBytes,
+		}
+
+		return keyPair, nil
 	default:
 		return nil, fmt.Errorf("%w: %s", asserter.ErrCurveTypeNotSupported, curve)
 	}
@@ -109,6 +128,32 @@ func GenerateKeypair(curve types.CurveType) (*KeyPair, error) {
 		}
 
 		return keyPair, nil
+	case types.Tweedle:
+		privKeyHex := OcamlGeneratePrivKey()
+
+		privKey, err := hex.DecodeString(privKeyHex)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %s", ErrPrivKeyUndecodable, privKeyHex)
+		}
+
+		pubKeyHex := OcamlDerivePublicKey(privKeyBytes)
+
+		pubKeyBytes, err := hex.DecodeString(pubKeyHex)
+		if err != nil {
+			return nil, fmt.Errorf("%w: %s", ErrPrivKeyUndecodable, pubKeyHex)
+		}
+
+		pubKey := &types.PublicKey{
+			Bytes:     pubKeyBytes,
+			CurveType: curve,
+		}
+
+		keyPair := &KeyPair{
+			PublicKey:  pubKey,
+			PrivateKey: privKeyBytes,
+		}
+
+		return keyPair, nil
 	default:
 		return nil, fmt.Errorf("%w: %s", asserter.ErrCurveTypeNotSupported, curve)
 	}
@@ -142,6 +187,8 @@ func (k *KeyPair) Signer() (Signer, error) {
 		return &SignerSecp256k1{k}, nil
 	case types.Edwards25519:
 		return &SignerEdwards25519{k}, nil
+	case types.Tweedle:
+		return &SignerTweedle{k}, nil
 	default:
 		return nil, fmt.Errorf("%w: %s", asserter.ErrCurveTypeNotSupported, k.PublicKey.CurveType)
 	}
