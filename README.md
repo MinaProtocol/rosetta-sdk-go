@@ -34,9 +34,13 @@ Jump to:
 
 * [Getting Started](#Getting-Started)
 * [Quick Examples](#Quick-Examples)
+* [SDK Packages](#SDK-Packages)
+* [Development](#Development)
 * [Testing](#Testing)
+* [Contributing](#Contributing)
 * [Documentation](#Documentation)
 * [Related Projects](#Related-Projects)
+* [License](#License)
 
 If you have a blockchain based on go-ethereum, we recommend that you use our [rosetta-geth-sdk](https://github.com/coinbase/rosetta-geth-sdk) SDK.
  
